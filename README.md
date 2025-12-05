@@ -174,15 +174,45 @@ npm start
 
 ## 🔐 Comptes de Test
 
+### Utilisateurs principaux
+
 | Rôle | Email | Mot de passe |
 |------|-------|--------------|
 | Admin | admin@gouvernorat-monastir.tn | admin123 |
 | Agent BO | agent@gouvernorat-monastir.tn | agent123 |
 | Secrétaire Général | sg@gouvernorat-monastir.tn | sg123 |
-| Chef Service (SAG) | chef@gouvernorat-monastir.tn | chef123 |
-| Chef Technique | chef.technique@gouvernorat-monastir.tn | chef123 |
-| Chef Social | chef.social@gouvernorat-monastir.tn | chef123 |
 | Citoyen | citoyen@example.com | citoyen123 |
+
+### 👤 Chefs de Service
+
+| Service | Email | Mot de passe |
+|---------|-------|--------------|
+| SAG | chef@gouvernorat-monastir.tn | chef123 |
+| Technique | chef.technique@gouvernorat-monastir.tn | chef123 |
+| Social | chef.social@gouvernorat-monastir.tn | chef123 |
+| Économique | chef.economique@gouvernorat-monastir.tn | chef123 |
+| Environnement | chef.environnement@gouvernorat-monastir.tn | chef123 |
+
+---
+
+## 🧪 Guide de Test
+
+### ✅ Tester les Rappels et Notifications
+
+1. **Créez un courrier** (connecté en citoyen)
+2. **Affectez-le à un service** (connecté en Agent BO)
+3. **Envoyez un rappel** (bouton "Envoyer rappel" sur le courrier)
+4. **Connectez-vous en tant que Chef du service** → La notification apparaît!
+
+### 📋 Exemple de test:
+
+| Courrier | Service affecté | Chef à connecter |
+|----------|-----------------|------------------|
+| BO-2025-00001 | Service Social | chef.social@gouvernorat-monastir.tn |
+| BO-2025-00002 | Service Technique | chef.technique@gouvernorat-monastir.tn |
+| BO-2025-00003 | Service Environnement | chef.environnement@gouvernorat-monastir.tn |
+
+> **Note**: Le rappel est toujours envoyé au **Chef du Service** auquel le courrier est affecté.
 
 ## 📁 Structure du Projet
 
