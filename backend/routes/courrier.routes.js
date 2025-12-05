@@ -139,6 +139,23 @@ router.post('/', protect, upload.single('fichier'), [
 
     await addHistory(courrier.id, req.user.id, 'creation', null, 'recu', 'Courrier créé');
 
+    // Notify all agents BO when a citizen creates a courrier
+    if (req.user.role === 'citoyen') {
+      const agents = await User.findAll({
+        where: { role: 'agent_bo', isActive: true }
+      });
+      
+      for (const agent of agents) {
+        await createNotification(
+          agent.id,
+          'nouveau_courrier',
+          '📬 Nouveau courrier reçu',
+          `${req.user.firstName} ${req.user.lastName} a déposé: ${objet}`,
+          courrier.id
+        );
+      }
+    }
+
     res.status(201).json({ success: true, data: courrier });
   } catch (error) {
     console.error('=== ERREUR CREATION COURRIER ===');

@@ -3,7 +3,7 @@ const router = express.Router();
 const { protect, authorize } = require('../middleware/auth');
 const VideoAssistance = require('../models/VideoAssistance');
 const User = require('../models/User');
-const { createNotification } = require('./notification.routes');
+const { createNotification } = require('../services/notificationHelper');
 
 // @route   GET /api/assistance
 // @desc    Get all assistance requests
