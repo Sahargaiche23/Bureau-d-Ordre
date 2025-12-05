@@ -35,10 +35,10 @@ const CourrierCreate = () => {
     }
   };
 
-  // AI Analysis when content changes (only for agent_bo and admin)
+  // AI Analysis when content changes
   const handleAiAnalysis = async () => {
-    // Only analyze if user is agent_bo or admin
-    if (!['agent_bo', 'admin'].includes(user?.role)) return;
+    // All users can use AI analysis
+    if (!user?.role) return;
     if (!formData.objet && !formData.contenu) return;
     
     setAnalyzing(true);
@@ -126,8 +126,8 @@ const CourrierCreate = () => {
             />
           </div>
 
-          {/* AI Suggestion - Only for agent_bo and admin */}
-          {user?.role && ['agent_bo', 'admin'].includes(user.role) && (
+          {/* AI Suggestion - For all users who can create courriers */}
+          {user?.role && ['agent_bo', 'admin', 'citoyen'].includes(user.role) && (
             <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4 border border-purple-200">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-medium text-purple-800 flex items-center">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { courrierAPI, serviceAPI } from '../services/api';
+import { courrierAPI, serviceAPI, aiAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -15,6 +15,7 @@ const CourrierDetail = () => {
   const [showTraiterModal, setShowTraiterModal] = useState(false);
   const [selectedService, setSelectedService] = useState('');
   const [reponse, setReponse] = useState('');
+  const [aiAnalysis, setAiAnalysis] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -28,6 +29,21 @@ const CourrierDetail = () => {
       ]);
       setCourrier(courrierRes.data.data);
       setServices(servicesRes.data.data);
+      
+      // Fetch AI analysis for the courrier
+      const courrierData = courrierRes.data.data;
+      if (courrierData.objet || courrierData.contenu) {
+        try {
+          const aiRes = await aiAPI.analyze({
+            objet: courrierData.objet || '',
+            contenu: courrierData.contenu || ''
+          });
+          setAiAnalysis(aiRes.data.data);
+        } catch (aiError) {
+          // AI analysis is optional, don't fail if it doesn't work
+          console.log('AI analysis not available');
+        }
+      }
     } catch (error) {
       toast.error('Courrier non trouvé');
       navigate('/courriers');
@@ -171,6 +187,60 @@ const CourrierDetail = () => {
           </div>
         )}
       </div>
+
+      {/* AI Analysis */}
+      {aiAnalysis && (
+        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 shadow-sm border border-purple-200">
+          <h2 className="text-lg font-semibold mb-4 text-purple-800">🤖 Analyse IA</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Catégorie détectée */}
+            <div className="bg-white rounded-lg p-4">
+              <p className="text-xs text-gray-500 mb-1">Type de demande</p>
+              <p className="font-semibold text-purple-800">{aiAnalysis.reason}</p>
+            </div>
+            
+            {/* Service suggéré */}
+            <div className="bg-white rounded-lg p-4">
+              <p className="text-xs text-gray-500 mb-1">Service suggéré</p>
+              <p className="font-semibold">{aiAnalysis.suggestedService?.name || 'Non déterminé'}</p>
+              <span className={`text-xs px-2 py-1 rounded-full mt-1 inline-block ${
+                aiAnalysis.confidence >= 70 ? 'bg-green-100 text-green-800' :
+                aiAnalysis.confidence >= 40 ? 'bg-yellow-100 text-yellow-800' :
+                'bg-gray-100 text-gray-800'
+              }`}>
+                Confiance: {aiAnalysis.confidence}%
+              </span>
+            </div>
+            
+            {/* Priorité détectée */}
+            <div className="bg-white rounded-lg p-4">
+              <p className="text-xs text-gray-500 mb-1">Priorité détectée</p>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                aiAnalysis.detectedPriority === 'urgente' ? 'bg-red-100 text-red-800' :
+                aiAnalysis.detectedPriority === 'haute' ? 'bg-orange-100 text-orange-800' :
+                aiAnalysis.detectedPriority === 'basse' ? 'bg-green-100 text-green-800' :
+                'bg-gray-100 text-gray-800'
+              }`}>
+                {aiAnalysis.detectedPriority || 'Normale'}
+              </span>
+            </div>
+          </div>
+          
+          {/* Mots-clés */}
+          {aiAnalysis.keywords?.length > 0 && (
+            <div className="mt-4">
+              <p className="text-xs text-gray-500 mb-2">Mots-clés détectés</p>
+              <div className="flex flex-wrap gap-2">
+                {aiAnalysis.keywords.map((kw, i) => (
+                  <span key={i} className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+                    {kw}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Réponse */}
       {courrier.reponse && (

@@ -45,6 +45,14 @@ const Dashboard = () => {
     archive: 'bg-gray-200 text-gray-600', rejete: 'bg-red-100 text-red-800'
   };
 
+  const roleLabels = {
+    admin: 'Administrateur',
+    agent_bo: 'Agent Bureau d\'Ordre',
+    chef_service: 'Chef de Service',
+    secretaire_general: 'Secrétaire Général',
+    citoyen: 'Citoyen'
+  };
+
   if (loading) {
     return <div className="flex justify-center items-center h-64">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -55,8 +63,17 @@ const Dashboard = () => {
     <div className="space-y-6">
       {/* Welcome */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold">Bienvenue, {user?.firstName}!</h1>
-        <p className="text-blue-100 mt-1">Bureau d'Ordre Digital - Gouvernorat de Monastir</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold">Bienvenue, {user?.firstName} {user?.lastName}!</h1>
+            <p className="text-blue-100 mt-1">Bureau d'Ordre Digital - Gouvernorat de Monastir</p>
+          </div>
+          <div className="text-right">
+            <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
+              {roleLabels[user?.role] || user?.role}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Stats Cards (Admin/Agent) */}
@@ -105,9 +122,11 @@ const Dashboard = () => {
       <div className="bg-white rounded-xl p-6 shadow-sm">
         <h2 className="text-lg font-semibold mb-4">Actions rapides</h2>
         <div className="flex flex-wrap gap-3">
-          <Link to="/courriers/nouveau" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            ✉️ Nouveau courrier
-          </Link>
+          {['admin', 'agent_bo', 'citoyen'].includes(user?.role) && (
+            <Link to="/courriers/nouveau" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+              ✉️ Nouveau courrier
+            </Link>
+          )}
           <Link to="/courriers" className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200">
             📋 Voir tous les courriers
           </Link>

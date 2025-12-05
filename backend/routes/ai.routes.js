@@ -5,8 +5,8 @@ const { analyzeCourrier, suggestService } = require('../services/aiService');
 const { checkAndSendReminders } = require('../services/reminderService');
 
 // @route   POST /api/ai/analyze
-// @desc    Analyze courrier content and suggest service
-router.post('/analyze', protect, authorize('agent_bo', 'admin'), async (req, res) => {
+// @desc    Analyze courrier content and suggest service (all authenticated users can view)
+router.post('/analyze', protect, async (req, res) => {
   try {
     const { objet, contenu } = req.body;
 

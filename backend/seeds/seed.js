@@ -89,19 +89,45 @@ const seedData = async () => {
       phone: '73500004'
     });
 
+    const chefEconomique = await User.create({
+      email: 'chef.economique@gouvernorat-monastir.tn',
+      password: 'chef123',
+      firstName: 'Sami',
+      lastName: 'Bouazizi',
+      role: 'chef_service',
+      serviceId: services[3].id,
+      phone: '73500005'
+    });
+
+    const chefEnvironnement = await User.create({
+      email: 'chef.environnement@gouvernorat-monastir.tn',
+      password: 'chef123',
+      firstName: 'Nadia',
+      lastName: 'Hamdi',
+      role: 'chef_service',
+      serviceId: services[4].id,
+      phone: '73500006'
+    });
+
     // Update service chefs
     await services[0].update({ chefId: chefService.id });
     await services[1].update({ chefId: chefTechnique.id });
     await services[2].update({ chefId: chefSocial.id });
+    await services[3].update({ chefId: chefEconomique.id });
+    await services[4].update({ chefId: chefEnvironnement.id });
 
     console.log('Users created');
     console.log('\\n=== Test Credentials ===');
     console.log('Admin: admin@gouvernorat-monastir.tn / admin123');
     console.log('Agent BO: agent@gouvernorat-monastir.tn / agent123');
-    console.log('Chef Service (SAG): chef@gouvernorat-monastir.tn / chef123');
+    console.log('Secrétaire Général: sg@gouvernorat-monastir.tn / sg123');
+    console.log('--- Chefs de Service ---');
+    console.log('Chef SAG: chef@gouvernorat-monastir.tn / chef123');
     console.log('Chef Technique: chef.technique@gouvernorat-monastir.tn / chef123');
     console.log('Chef Social: chef.social@gouvernorat-monastir.tn / chef123');
-    console.log('Secrétaire Général: sg@gouvernorat-monastir.tn / sg123');
+    console.log('Chef Économique: chef.economique@gouvernorat-monastir.tn / chef123');
+    console.log('Chef Environnement: chef.environnement@gouvernorat-monastir.tn / chef123');
+    console.log('------------------------');
     console.log('Citoyen: citoyen@example.com / citoyen123');
     console.log('========================\\n');
 

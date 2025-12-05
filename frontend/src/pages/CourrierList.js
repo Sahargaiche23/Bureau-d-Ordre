@@ -88,12 +88,14 @@ const CourrierList = () => {
               <option key={service.id} value={service.id}>{service.name}</option>
             ))}
           </select>
-          <Link
-            to="/courriers/nouveau"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center"
-          >
-            + Nouveau
-          </Link>
+          {['admin', 'agent_bo', 'citoyen'].includes(user?.role) && (
+            <Link
+              to="/courriers/nouveau"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-center"
+            >
+              + Nouveau
+            </Link>
+          )}
         </div>
       </div>
 
