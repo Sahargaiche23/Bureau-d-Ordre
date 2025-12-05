@@ -60,7 +60,7 @@ function App() {
           } />
           
           <Route path="/courriers/nouveau" element={
-            <ProtectedRoute><CourrierCreate /></ProtectedRoute>
+            <ProtectedRoute roles={['admin', 'agent_bo', 'citoyen']}><CourrierCreate /></ProtectedRoute>
           } />
           
           <Route path="/courriers/:id" element={
