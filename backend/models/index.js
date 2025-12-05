@@ -4,6 +4,7 @@ const Service = require('./Service');
 const Courrier = require('./Courrier');
 const CourrierHistory = require('./CourrierHistory');
 const Notification = require('./Notification');
+const VideoAssistance = require('./VideoAssistance');
 
 // Associations
 User.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
@@ -28,4 +29,8 @@ Notification.belongsTo(User, { foreignKey: 'userId', as: 'destinataire' });
 User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
 Notification.belongsTo(Courrier, { foreignKey: 'courrierId', as: 'courrier' });
 
-module.exports = { sequelize, User, Service, Courrier, CourrierHistory, Notification };
+VideoAssistance.belongsTo(User, { foreignKey: 'citizenId', as: 'citizen' });
+VideoAssistance.belongsTo(User, { foreignKey: 'agentId', as: 'agent' });
+User.hasMany(VideoAssistance, { foreignKey: 'citizenId', as: 'assistanceRequests' });
+
+module.exports = { sequelize, User, Service, Courrier, CourrierHistory, Notification, VideoAssistance };

@@ -14,6 +14,7 @@ import UserManagement from './pages/UserManagement';
 import ServiceManagement from './pages/ServiceManagement';
 import TrackCourrier from './pages/TrackCourrier';
 import Notifications from './pages/Notifications';
+import VideoAssistance from './pages/VideoAssistance';
 
 // Components
 import Layout from './components/Layout';
@@ -77,6 +78,10 @@ function App() {
           
           <Route path="/services" element={
             <ProtectedRoute roles={['admin']}><ServiceManagement /></ProtectedRoute>
+          } />
+          
+          <Route path="/assistance" element={
+            <ProtectedRoute><VideoAssistance /></ProtectedRoute>
           } />
           
           {/* Default */}

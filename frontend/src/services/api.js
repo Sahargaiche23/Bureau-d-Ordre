@@ -95,3 +95,13 @@ export const aiAPI = {
   suggestService: (data) => api.post('/ai/suggest-service', data),
   checkReminders: () => api.post('/ai/check-reminders')
 };
+
+// Video Assistance API
+export const assistanceAPI = {
+  getAll: () => api.get('/assistance'),
+  create: (data) => api.post('/assistance', data),
+  startCall: (id) => api.put(`/assistance/${id}/start`),
+  endCall: (id) => api.put(`/assistance/${id}/end`),
+  rate: (id, rating) => api.put(`/assistance/${id}/rate`, { rating }),
+  cancel: (id) => api.delete(`/assistance/${id}`)
+};

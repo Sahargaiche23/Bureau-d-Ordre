@@ -32,6 +32,7 @@ const Layout = ({ children }) => {
     { path: '/dashboard', label: 'Tableau de bord', icon: '📊', roles: ['admin', 'agent_bo', 'chef_service', 'secretaire_general', 'citoyen'] },
     { path: '/courriers', label: 'Courriers', icon: '📬', roles: ['admin', 'agent_bo', 'chef_service', 'secretaire_general', 'citoyen'] },
     { path: '/courriers/nouveau', label: 'Nouveau Courrier', icon: '✉️', roles: ['admin', 'agent_bo', 'citoyen'] },
+    { path: '/assistance', label: 'Assistance Vidéo', icon: '📹', roles: ['admin', 'agent_bo', 'chef_service', 'citoyen'] },
     { path: '/users', label: 'Utilisateurs', icon: '👥', roles: ['admin'] },
     { path: '/services', label: 'Services', icon: '🏢', roles: ['admin'] },
     { path: '/notifications', label: 'Notifications', icon: '🔔', roles: ['admin', 'agent_bo', 'chef_service', 'secretaire_general', 'citoyen'] },

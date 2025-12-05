@@ -28,6 +28,7 @@ app.use('/api/services', require('./routes/service.routes'));
 app.use('/api/dashboard', require('./routes/dashboard.routes'));
 app.use('/api/notifications', require('./routes/notification.routes'));
 app.use('/api/ai', require('./routes/ai.routes'));
+app.use('/api/assistance', require('./routes/assistance.routes'));
 
 // Scheduled task: Check reminders every hour
 const { checkAndSendReminders } = require('./services/reminderService');
