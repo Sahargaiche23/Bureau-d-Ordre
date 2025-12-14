@@ -7,6 +7,7 @@ const { protect, authorize } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 const { notifyCitizenOnComplete } = require('../services/reminderService');
 const { sendEmail } = require('../services/emailService');
+const PDFService = require('../services/pdfService');
 
 // Helper: Create history entry
 const addHistory = async (courrierId, userId, action, ancienStatus, nouveauStatus, commentaire = null) => {
@@ -308,6 +309,79 @@ router.get('/suivi/:reference', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Erreur serveur' });
+  }
+});
+
+// @route   GET /api/courriers/:id/pdf
+// @desc    Download PDF response for a courrier
+router.get('/:id/pdf', async (req, res) => {
+  try {
+    const { lang = 'fr' } = req.query;
+    
+    const courrier = await Courrier.findByPk(req.params.id, {
+      include: [
+        { model: User, as: 'expediteur', attributes: ['id', 'firstName', 'lastName', 'email'] },
+        { model: Service, as: 'serviceDestinataire' },
+        { model: User, as: 'traiteur', attributes: ['id', 'firstName', 'lastName'] }
+      ]
+    });
+
+    if (!courrier) {
+      return res.status(404).json({ success: false, message: 'Courrier non trouvé' });
+    }
+
+    // Generate PDF
+    const doc = PDFService.generateReponsePDF(courrier, lang);
+
+    // Set response headers
+    const filename = `reponse-${courrier.reference}-${lang}.pdf`;
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+    // Pipe the PDF to response
+    doc.pipe(res);
+    doc.end();
+
+  } catch (error) {
+    console.error('PDF Generation Error:', error);
+    res.status(500).json({ success: false, message: 'Erreur lors de la génération du PDF' });
+  }
+});
+
+// @route   GET /api/courriers/suivi/:reference/pdf
+// @desc    Download PDF response by reference (public)
+router.get('/suivi/:reference/pdf', async (req, res) => {
+  try {
+    const { lang = 'fr' } = req.query;
+    
+    const courrier = await Courrier.findOne({
+      where: { reference: req.params.reference },
+      include: [
+        { model: User, as: 'expediteur', attributes: ['id', 'firstName', 'lastName', 'email'] },
+        { model: Service, as: 'serviceDestinataire' },
+        { model: User, as: 'traiteur', attributes: ['id', 'firstName', 'lastName'] }
+      ]
+    });
+
+    if (!courrier) {
+      return res.status(404).json({ success: false, message: 'Courrier non trouvé' });
+    }
+
+    // Generate PDF
+    const doc = PDFService.generateReponsePDF(courrier, lang);
+
+    // Set response headers
+    const filename = `reponse-${courrier.reference}-${lang}.pdf`;
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+    // Pipe the PDF to response
+    doc.pipe(res);
+    doc.end();
+
+  } catch (error) {
+    console.error('PDF Generation Error:', error);
+    res.status(500).json({ success: false, message: 'Erreur lors de la génération du PDF' });
   }
 });
 

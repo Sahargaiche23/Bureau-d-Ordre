@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 // Pages
 import Login from './pages/Login';
@@ -14,7 +15,6 @@ import UserManagement from './pages/UserManagement';
 import ServiceManagement from './pages/ServiceManagement';
 import TrackCourrier from './pages/TrackCourrier';
 import Notifications from './pages/Notifications';
-import VideoAssistance from './pages/VideoAssistance';
 
 // Components
 import Layout from './components/Layout';
@@ -42,10 +42,11 @@ const ProtectedRoute = ({ children, roles }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Toaster position="top-right" />
-        <Routes>
+    <LanguageProvider>
+      <AuthProvider>
+        <Router>
+          <Toaster position="top-right" />
+          <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -80,15 +81,12 @@ function App() {
             <ProtectedRoute roles={['admin']}><ServiceManagement /></ProtectedRoute>
           } />
           
-          <Route path="/assistance" element={
-            <ProtectedRoute><VideoAssistance /></ProtectedRoute>
-          } />
-          
           {/* Default */}
           <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+        </Router>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }
 

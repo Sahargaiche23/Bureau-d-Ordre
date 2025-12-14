@@ -53,7 +53,9 @@ export const courrierAPI = {
     headers: data instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : {}
   }),
   rappel: (id, data) => api.put(`/courriers/${id}/rappel`, data),
-  track: (reference) => api.get(`/courriers/suivi/${reference}`)
+  track: (reference) => api.get(`/courriers/suivi/${reference}`),
+  downloadPDF: (id, lang = 'fr') => `${api.defaults.baseURL}/courriers/${id}/pdf?lang=${lang}`,
+  downloadPDFByRef: (reference, lang = 'fr') => `${api.defaults.baseURL}/courriers/suivi/${reference}/pdf?lang=${lang}`
 };
 
 // User API
