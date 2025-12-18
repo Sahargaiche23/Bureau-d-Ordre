@@ -18,7 +18,7 @@ const CourrierHistory = sequelize.define('CourrierHistory', {
   },
   userId: {
     type: DataTypes.UUID,
-    allowNull: false,
+    allowNull: true,
     field: 'user_id'
   },
   ancienStatus: {

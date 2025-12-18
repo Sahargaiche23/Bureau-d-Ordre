@@ -7,30 +7,30 @@ const Notification = require('./Notification');
 const VideoAssistance = require('./VideoAssistance');
 
 // Associations
-User.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
+User.belongsTo(Service, { foreignKey: 'serviceId', as: 'service', onDelete: 'SET NULL' });
 Service.hasMany(User, { foreignKey: 'serviceId', as: 'membres' });
-Service.belongsTo(User, { foreignKey: 'chefId', as: 'chef' });
+Service.belongsTo(User, { foreignKey: 'chefId', as: 'chef', onDelete: 'SET NULL' });
 
-Courrier.belongsTo(User, { foreignKey: 'expediteurId', as: 'expediteur' });
+Courrier.belongsTo(User, { foreignKey: 'expediteurId', as: 'expediteur', onDelete: 'SET NULL' });
 User.hasMany(Courrier, { foreignKey: 'expediteurId', as: 'courriersEnvoyes' });
 
 Courrier.belongsTo(Service, { foreignKey: 'destinataireServiceId', as: 'serviceDestinataire' });
 Service.hasMany(Courrier, { foreignKey: 'destinataireServiceId', as: 'courriersRecus' });
 
-Courrier.belongsTo(User, { foreignKey: 'agentBoId', as: 'agentBo' });
-Courrier.belongsTo(User, { foreignKey: 'traitePar', as: 'traiteur' });
+Courrier.belongsTo(User, { foreignKey: 'agentBoId', as: 'agentBo', onDelete: 'SET NULL' });
+Courrier.belongsTo(User, { foreignKey: 'traitePar', as: 'traiteur', onDelete: 'SET NULL' });
 Courrier.belongsTo(Service, { foreignKey: 'serviceSuggere', as: 'suggestionIa' });
 
 CourrierHistory.belongsTo(Courrier, { foreignKey: 'courrierId', as: 'courrier' });
 Courrier.hasMany(CourrierHistory, { foreignKey: 'courrierId', as: 'historique' });
-CourrierHistory.belongsTo(User, { foreignKey: 'userId', as: 'utilisateur' });
+CourrierHistory.belongsTo(User, { foreignKey: 'userId', as: 'utilisateur', onDelete: 'SET NULL' });
 
-Notification.belongsTo(User, { foreignKey: 'userId', as: 'destinataire' });
+Notification.belongsTo(User, { foreignKey: 'userId', as: 'destinataire', onDelete: 'CASCADE' });
 User.hasMany(Notification, { foreignKey: 'userId', as: 'notifications' });
 Notification.belongsTo(Courrier, { foreignKey: 'courrierId', as: 'courrier' });
 
-VideoAssistance.belongsTo(User, { foreignKey: 'citizenId', as: 'citizen' });
-VideoAssistance.belongsTo(User, { foreignKey: 'agentId', as: 'agent' });
+VideoAssistance.belongsTo(User, { foreignKey: 'citizenId', as: 'citizen', onDelete: 'SET NULL' });
+VideoAssistance.belongsTo(User, { foreignKey: 'agentId', as: 'agent', onDelete: 'SET NULL' });
 User.hasMany(VideoAssistance, { foreignKey: 'citizenId', as: 'assistanceRequests' });
 
 module.exports = { sequelize, User, Service, Courrier, CourrierHistory, Notification, VideoAssistance };

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const { User, Service } = require('../models');
+const { User, Service, Courrier, CourrierHistory, Notification, VideoAssistance } = require('../models');
 const { protect, authorize } = require('../middleware/auth');
 
 // @route   GET /api/users
@@ -118,6 +118,18 @@ router.delete('/:id', protect, authorize('admin'), async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'Utilisateur non trouvé' });
     }
+
+    const userId = req.params.id;
+
+    // Nettoyer les références avant suppression
+    await Courrier.update({ expediteurId: null }, { where: { expediteurId: userId } });
+    await Courrier.update({ agentBoId: null }, { where: { agentBoId: userId } });
+    await Courrier.update({ traitePar: null }, { where: { traitePar: userId } });
+    await CourrierHistory.update({ userId: null }, { where: { userId: userId } });
+    await Service.update({ chefId: null }, { where: { chefId: userId } });
+    await VideoAssistance.update({ citizenId: null }, { where: { citizenId: userId } });
+    await VideoAssistance.update({ agentId: null }, { where: { agentId: userId } });
+    await Notification.destroy({ where: { userId: userId } });
 
     await user.destroy();
     res.json({ success: true, message: 'Utilisateur supprimé' });

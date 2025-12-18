@@ -9,7 +9,7 @@ const VideoAssistance = sequelize.define('VideoAssistance', {
   },
   citizenId: {
     type: DataTypes.UUID,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: 'users',
       key: 'id'
